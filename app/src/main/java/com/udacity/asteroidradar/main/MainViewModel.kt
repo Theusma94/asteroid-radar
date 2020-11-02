@@ -1,12 +1,11 @@
 package com.udacity.asteroidradar.main
 
 import androidx.lifecycle.*
-import com.udacity.asteroidradar.Asteroid
+import com.udacity.asteroidradar.data.domain.Asteroid
 import com.udacity.asteroidradar.data.api.Network
 import com.udacity.asteroidradar.data.api.parseAsteroidsJsonResult
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import timber.log.Timber
 
 class MainViewModel(apiKey: String) : ViewModel() {
 
