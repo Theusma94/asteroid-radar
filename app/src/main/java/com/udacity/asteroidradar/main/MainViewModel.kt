@@ -1,26 +1,24 @@
 package com.udacity.asteroidradar.main
 
-import android.app.Application
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.data.api.Network
 import com.udacity.asteroidradar.data.api.parseAsteroidsJsonResult
 import kotlinx.coroutines.launch
-import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
 import timber.log.Timber
 
 class MainViewModel(apiKey: String) : ViewModel() {
+
+    private var _resultAsteroids = MutableLiveData<List<Asteroid>>()
+    val resultAsteroids: LiveData<List<Asteroid>> = _resultAsteroids
 
     init {
         viewModelScope.launch {
             val result = Network.asteroids.getAsteroids("neo/rest/v1/feed?start_date=$START_DATE&end_date=$END_DATE&api_key=$apiKey").await()
             val jsonObject = JSONObject(result)
             val resultParsed = parseAsteroidsJsonResult(jsonObject)
-            resultParsed.forEach {
-                Timber.d(it.toString())
-            }
+            _resultAsteroids.value = resultParsed
         }
     }
 
