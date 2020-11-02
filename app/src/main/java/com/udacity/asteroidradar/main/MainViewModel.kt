@@ -5,17 +5,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.udacity.asteroidradar.data.api.Network
+import com.udacity.asteroidradar.data.api.parseAsteroidsJsonResult
 import kotlinx.coroutines.launch
 import okhttp3.logging.HttpLoggingInterceptor
+import org.json.JSONObject
 import timber.log.Timber
 
 class MainViewModel(apiKey: String) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            val result = Network.asteroids.getAsteroids("feed?start_date=$START_DATE&end_date=$END_DATE&api_key=$apiKey").await()
-            result.asteroids.startDate?.forEach {
-                Timber.d(it.id)
+            val result = Network.asteroids.getAsteroids("neo/rest/v1/feed?start_date=$START_DATE&end_date=$END_DATE&api_key=$apiKey").await()
+            val jsonObject = JSONObject(result)
+            val resultParsed = parseAsteroidsJsonResult(jsonObject)
+            resultParsed.forEach {
+                Timber.d(it.toString())
             }
         }
     }
@@ -31,7 +35,7 @@ class MainViewModel(apiKey: String) : ViewModel() {
     }
 
     companion object {
-        const val START_DATE = "2015-09-08"
-        const val END_DATE = "2015-09-09"
+        const val START_DATE = "2020-11-01"
+        const val END_DATE = "2020-11-03"
     }
 }
