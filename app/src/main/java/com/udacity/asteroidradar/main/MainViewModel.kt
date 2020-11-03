@@ -1,5 +1,6 @@
 package com.udacity.asteroidradar.main
 
+import android.app.Application
 import androidx.lifecycle.*
 import com.udacity.asteroidradar.data.domain.Asteroid
 import com.udacity.asteroidradar.data.api.Network
@@ -7,7 +8,7 @@ import com.udacity.asteroidradar.data.api.parseAsteroidsJsonResult
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
-class MainViewModel(apiKey: String) : ViewModel() {
+class MainViewModel(private val apiKey: String, application: Application) : AndroidViewModel(application) {
 
     private var _resultAsteroids = MutableLiveData<List<Asteroid>>()
     val resultAsteroids: LiveData<List<Asteroid>> = _resultAsteroids
@@ -21,11 +22,11 @@ class MainViewModel(apiKey: String) : ViewModel() {
         }
     }
 
-    class Factory(private val apiKey: String) : ViewModelProvider.Factory {
+    class Factory(private val apiKey: String, private val application: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return MainViewModel(apiKey) as T
+                return MainViewModel(apiKey,application) as T
             }
             throw IllegalArgumentException("Unable to construct viewmodel")
         }
