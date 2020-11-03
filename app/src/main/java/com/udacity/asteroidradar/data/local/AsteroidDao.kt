@@ -1,0 +1,18 @@
+package com.udacity.asteroidradar.data.local
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import com.udacity.asteroidradar.data.domain.Asteroid
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface AsteroidDao {
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(asteroids: List<AsteroidEntity>)
+
+    @Query("SELECT * FROM asteroid ORDER BY date(closeApproachDate) DESC")
+    fun getAllAsteroids(): Flow<List<AsteroidEntity>>
+}
