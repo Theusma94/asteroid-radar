@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.udacity.asteroidradar.Constants
+import com.udacity.asteroidradar.data.domain.PictureOfDay
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -17,8 +18,8 @@ interface AsteroidService {
     @GET
     fun getAsteroids(@Url url: String): Deferred<String>
 
-//    @GET
-//    fun getImageOfDay(@Query("") query: String): Deferred<>
+    @GET
+    fun getImageOfDay(@Url url: String): Deferred<PictureOfDay>
 }
 
 private val moshi = Moshi.Builder()
@@ -34,7 +35,6 @@ private fun client(): OkHttpClient {
 }
 
 object Network {
-
 
     // Configure retrofit to parse JSON and use coroutines
     private val retrofit = Retrofit.Builder()

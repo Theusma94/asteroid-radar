@@ -19,6 +19,9 @@ class MainViewModel(private val apiKey: String, application: Application) : Andr
     private var _statusLoading = MutableLiveData<Boolean>()
     val statusLoading: LiveData<Boolean> = _statusLoading
 
+    private var _urlPicOfDay = MutableLiveData<String>()
+    val urlPicOfDay: LiveData<String> = _urlPicOfDay
+
     private val asteroidRepository: AsteroidRepository by lazy {
         val database = getDatabase(getApplication())
         AsteroidRepository(database)
@@ -34,6 +37,24 @@ class MainViewModel(private val apiKey: String, application: Application) : Andr
                     fetchAsteroids()
                 }
             }
+        }
+
+        viewModelScope.launch {
+            asteroidRepository.picOfDay.map {
+                it.asDomainModel()
+            }.collect {
+                if(it != null) {
+                    _urlPicOfDay.postValue(it.url)
+                } else {
+                    fetchPicOfDay()
+                }
+            }
+        }
+    }
+
+    fun fetchPicOfDay() {
+        viewModelScope.launch {
+            asteroidRepository.refreshPicOfDay(apiKey)
         }
     }
 

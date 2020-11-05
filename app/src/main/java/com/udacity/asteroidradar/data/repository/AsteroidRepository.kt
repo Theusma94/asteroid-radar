@@ -17,6 +17,7 @@ import org.json.JSONObject
 class AsteroidRepository(private val asteroidDatabase: AsteroidDatabase) {
 
     val asteroidsLocal = asteroidDatabase.asteroidDao.getAllAsteroids()
+    val picOfDay = asteroidDatabase.picOFDayDao.getPictureOfDay()
 
     suspend fun refreshAsteroids(apiKey: String, dispatcher: CoroutineDispatcher = Dispatchers.IO): Flow<DataState> {
         return flow {
@@ -34,5 +35,18 @@ class AsteroidRepository(private val asteroidDatabase: AsteroidDatabase) {
                 }
             }
         }.flowOn(dispatcher)
+    }
+
+    suspend fun refreshPicOfDay(apiKey: String, dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+        withContext(dispatcher) {
+            try {
+                val result = Network.asteroids.getImageOfDay("planetary/apod?api_key=$apiKey").await()
+                if(result.mediaType == "image") {
+                    asteroidDatabase.picOFDayDao.insertPictureOfDay(result.asDatabaseModel())
+                }
+            } catch (throwable: Throwable) {
+
+            }
+        }
     }
 }

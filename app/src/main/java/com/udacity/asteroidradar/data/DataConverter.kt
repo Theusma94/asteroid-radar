@@ -1,7 +1,9 @@
 package com.udacity.asteroidradar.data
 
 import com.udacity.asteroidradar.data.domain.Asteroid
+import com.udacity.asteroidradar.data.domain.PictureOfDay
 import com.udacity.asteroidradar.data.local.AsteroidEntity
+import com.udacity.asteroidradar.data.local.PicOfDayDatabase
 
 fun List<AsteroidEntity>.asDomainModel(): List<Asteroid> {
     return map {
@@ -31,4 +33,22 @@ fun List<Asteroid>.asDatabaseModel(): List<AsteroidEntity> {
                 isPotentiallyHazardous = it.isPotentiallyHazardous
         )
     }
+}
+
+fun PictureOfDay.asDatabaseModel(): PicOfDayDatabase {
+    return PicOfDayDatabase(
+            url = this.url,
+            mediaType =  this.mediaType,
+            title = this.title
+    )
+}
+
+fun PicOfDayDatabase?.asDomainModel(): PictureOfDay? {
+    return if(this != null) {
+        PictureOfDay(
+                url = this.url,
+                mediaType = this.mediaType,
+                title = this.title
+        )
+    } else null
 }
