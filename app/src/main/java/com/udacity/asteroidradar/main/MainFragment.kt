@@ -13,9 +13,10 @@ class MainFragment : Fragment() {
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this,
-            MainViewModel.Factory(
-                requireContext().getString(R.string.API_KEY)
-            )
+                MainViewModel.Factory(
+                        requireContext().getString(R.string.API_KEY),
+                        requireActivity().application
+                )
         ).get(MainViewModel::class.java)
     }
 

@@ -1,32 +1,86 @@
 package com.udacity.asteroidradar.main
 
+import android.app.Application
 import androidx.lifecycle.*
-import com.udacity.asteroidradar.Asteroid
-import com.udacity.asteroidradar.data.api.Network
-import com.udacity.asteroidradar.data.api.parseAsteroidsJsonResult
+import com.udacity.asteroidradar.data.domain.Asteroid
+import com.udacity.asteroidradar.data.asDomainModel
+import com.udacity.asteroidradar.data.local.getDatabase
+import com.udacity.asteroidradar.data.repository.AsteroidRepository
+import com.udacity.asteroidradar.utils.DataState
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-import timber.log.Timber
 
-class MainViewModel(apiKey: String) : ViewModel() {
+class MainViewModel(private val apiKey: String, application: Application) : AndroidViewModel(application) {
 
     private var _resultAsteroids = MutableLiveData<List<Asteroid>>()
     val resultAsteroids: LiveData<List<Asteroid>> = _resultAsteroids
 
+    private var _statusLoading = MutableLiveData<Boolean>()
+    val statusLoading: LiveData<Boolean> = _statusLoading
+
+    private var _urlPicOfDay = MutableLiveData<String>()
+    val urlPicOfDay: LiveData<String> = _urlPicOfDay
+
+    private val asteroidRepository: AsteroidRepository by lazy {
+        val database = getDatabase(getApplication())
+        AsteroidRepository(database)
+    }
     init {
         viewModelScope.launch {
-            val result = Network.asteroids.getAsteroids("neo/rest/v1/feed?start_date=$START_DATE&end_date=$END_DATE&api_key=$apiKey").await()
-            val jsonObject = JSONObject(result)
-            val resultParsed = parseAsteroidsJsonResult(jsonObject)
-            _resultAsteroids.value = resultParsed
+            asteroidRepository.asteroidsLocal.map {
+                it.asDomainModel()
+            }.collect {
+                if(it.isNotEmpty()) {
+                    _resultAsteroids.postValue(it)
+                } else {
+                    fetchAsteroids()
+                }
+            }
+        }
+
+        viewModelScope.launch {
+            asteroidRepository.picOfDay.map {
+                it.asDomainModel()
+            }.collect {
+                if(it != null) {
+                    _urlPicOfDay.postValue(it.url)
+                } else {
+                    fetchPicOfDay()
+                }
+            }
         }
     }
 
-    class Factory(private val apiKey: String) : ViewModelProvider.Factory {
+    fun fetchPicOfDay() {
+        viewModelScope.launch {
+            asteroidRepository.refreshPicOfDay(apiKey)
+        }
+    }
+
+    fun fetchAsteroids() {
+        viewModelScope.launch {
+            asteroidRepository.refreshAsteroids(apiKey).collect { state ->
+                when(state) {
+                    DataState.Loading -> {
+                        _statusLoading.value = true
+                    }
+                    DataState.Error -> {
+                        _statusLoading.value = false
+                    }
+                    DataState.Success -> {
+                        _statusLoading.value = false
+                    }
+                }
+            }
+        }
+    }
+
+    class Factory(private val apiKey: String, private val application: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return MainViewModel(apiKey) as T
+                return MainViewModel(apiKey,application) as T
             }
             throw IllegalArgumentException("Unable to construct viewmodel")
         }
