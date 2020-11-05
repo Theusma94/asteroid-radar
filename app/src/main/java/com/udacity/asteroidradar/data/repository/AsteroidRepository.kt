@@ -4,8 +4,8 @@ import com.udacity.asteroidradar.data.api.Network
 import com.udacity.asteroidradar.data.api.parseAsteroidsJsonResult
 import com.udacity.asteroidradar.data.asDatabaseModel
 import com.udacity.asteroidradar.data.local.AsteroidDatabase
-import com.udacity.asteroidradar.main.MainViewModel
 import com.udacity.asteroidradar.utils.DataState
+import com.udacity.asteroidradar.utils.DateHelper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -25,7 +25,9 @@ class AsteroidRepository(private val asteroidDatabase: AsteroidDatabase) {
             withContext(dispatcher) {
                 try {
                     val result = Network.asteroids.getAsteroids(
-                            "neo/rest/v1/feed?start_date=${MainViewModel.START_DATE}&end_date=${MainViewModel.END_DATE}&api_key=$apiKey").await()
+                            "neo/rest/v1/feed?start_date=" +
+                                    "${DateHelper.getStartDateFormatted()}&end_date=" +
+                                    "${DateHelper.getEndDateFormatted()}&api_key=$apiKey").await()
                     val jsonObject = JSONObject(result)
                     val resultParsed = parseAsteroidsJsonResult(jsonObject)
                     asteroidDatabase.asteroidDao.insertAll(resultParsed.asDatabaseModel())
