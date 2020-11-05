@@ -85,9 +85,4 @@ class MainViewModel(private val apiKey: String, application: Application) : Andr
             throw IllegalArgumentException("Unable to construct viewmodel")
         }
     }
-
-    companion object {
-        const val START_DATE = "2020-11-01"
-        const val END_DATE = "2020-11-03"
-    }
 }
