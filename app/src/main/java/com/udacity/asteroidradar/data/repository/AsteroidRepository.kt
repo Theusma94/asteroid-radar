@@ -17,6 +17,7 @@ import org.json.JSONObject
 class AsteroidRepository(private val asteroidDatabase: AsteroidDatabase) {
 
     val asteroidsLocal = asteroidDatabase.asteroidDao.getAllAsteroids()
+    val asteroidsOfToday = asteroidDatabase.asteroidDao.getTodayAsteroids(DateHelper.getStartDateFormatted())
     val picOfDay = asteroidDatabase.picOFDayDao.getPictureOfDay()
 
     suspend fun refreshAsteroids(apiKey: String, dispatcher: CoroutineDispatcher = Dispatchers.IO): Flow<DataState> {

@@ -27,23 +27,17 @@ class MainViewModel(private val apiKey: String, application: Application) : Andr
         AsteroidRepository(database)
     }
     init {
-        viewModelScope.launch {
-            asteroidRepository.asteroidsLocal.map {
-                it.asDomainModel()
-            }.collect {
-                if(it.isNotEmpty()) {
-                    _resultAsteroids.postValue(it)
-                } else {
-                    fetchAsteroids()
-                }
-            }
-        }
+        getAllAsteoids()
 
+        getPictureOfDay()
+    }
+
+    private fun getPictureOfDay() {
         viewModelScope.launch {
             asteroidRepository.picOfDay.map {
                 it.asDomainModel()
             }.collect {
-                if(it != null) {
+                if (it != null) {
                     _urlPicOfDay.postValue(it.url)
                 } else {
                     fetchPicOfDay()
@@ -52,13 +46,37 @@ class MainViewModel(private val apiKey: String, application: Application) : Andr
         }
     }
 
-    fun fetchPicOfDay() {
+    fun getAllAsteoids() {
+        viewModelScope.launch {
+            asteroidRepository.asteroidsLocal.map {
+                it.asDomainModel()
+            }.collect {
+                if (it.isNotEmpty()) {
+                    _resultAsteroids.postValue(it)
+                } else {
+                    fetchAsteroids()
+                }
+            }
+        }
+    }
+
+    fun getTodayAsteroids() {
+        viewModelScope.launch {
+            asteroidRepository.asteroidsOfToday.map {
+                it.asDomainModel()
+            }.collect {
+                _resultAsteroids.value = it
+            }
+        }
+    }
+
+    private fun fetchPicOfDay() {
         viewModelScope.launch {
             asteroidRepository.refreshPicOfDay(apiKey)
         }
     }
 
-    fun fetchAsteroids() {
+    private fun fetchAsteroids() {
         viewModelScope.launch {
             asteroidRepository.refreshAsteroids(apiKey).collect { state ->
                 when(state) {
