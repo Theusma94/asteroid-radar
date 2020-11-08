@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.udacity.asteroidradar.data.domain.Asteroid
 import com.udacity.asteroidradar.data.asDomainModel
+import com.udacity.asteroidradar.data.domain.PictureOfDay
 import com.udacity.asteroidradar.data.local.getDatabase
 import com.udacity.asteroidradar.data.repository.AsteroidRepository
 import com.udacity.asteroidradar.utils.DataState
@@ -19,8 +20,8 @@ class MainViewModel(private val apiKey: String, application: Application) : Andr
     private var _statusLoading = MutableLiveData<Boolean>()
     val statusLoading: LiveData<Boolean> = _statusLoading
 
-    private var _urlPicOfDay = MutableLiveData<String>()
-    val urlPicOfDay: LiveData<String> = _urlPicOfDay
+    private var _urlPicOfDay = MutableLiveData<PictureOfDay>()
+    val urlPicOfDay: LiveData<PictureOfDay> = _urlPicOfDay
 
     private val asteroidRepository: AsteroidRepository by lazy {
         val database = getDatabase(getApplication())
@@ -38,7 +39,7 @@ class MainViewModel(private val apiKey: String, application: Application) : Andr
                 it.asDomainModel()
             }.collect {
                 if (it != null) {
-                    _urlPicOfDay.postValue(it.url)
+                    _urlPicOfDay.postValue(it)
                 } else {
                     fetchPicOfDay()
                 }
