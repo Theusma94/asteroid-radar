@@ -53,4 +53,10 @@ class AsteroidRepository(private val asteroidDatabase: AsteroidDatabase) {
             }
         }
     }
+
+    suspend fun deleteAsteroidsBeforeToday(coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO) {
+        withContext(coroutineDispatcher) {
+            asteroidDatabase.asteroidDao.deleteBeforeToday(DateHelper.getStartDateFormatted())
+        }
+    }
 }
