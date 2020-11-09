@@ -17,6 +17,7 @@ import org.json.JSONObject
 class AsteroidRepository(private val asteroidDatabase: AsteroidDatabase) {
 
     val asteroidsLocal = asteroidDatabase.asteroidDao.getAllAsteroids()
+    val asteroidsOfWeek = asteroidDatabase.asteroidDao.getWeekAsteroids(DateHelper.getEndOfWeekFormatted())
     val asteroidsOfToday = asteroidDatabase.asteroidDao.getTodayAsteroids(DateHelper.getStartDateFormatted())
     val picOfDay = asteroidDatabase.picOFDayDao.getPictureOfDay()
 
@@ -50,6 +51,12 @@ class AsteroidRepository(private val asteroidDatabase: AsteroidDatabase) {
             } catch (throwable: Throwable) {
 
             }
+        }
+    }
+
+    suspend fun deleteAsteroidsBeforeToday(coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO) {
+        withContext(coroutineDispatcher) {
+            asteroidDatabase.asteroidDao.deleteBeforeToday(DateHelper.getStartDateFormatted())
         }
     }
 }

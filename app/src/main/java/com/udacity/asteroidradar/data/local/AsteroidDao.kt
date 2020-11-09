@@ -16,6 +16,12 @@ interface AsteroidDao {
     @Query("SELECT * FROM asteroid ORDER BY date(closeApproachDate) DESC")
     fun getAllAsteroids(): Flow<List<AsteroidEntity>>
 
+    @Query("SELECT * FROM asteroid WHERE closeApproachDate <= :lastDayOfWeek ORDER BY date(closeApproachDate) DESC")
+    fun getWeekAsteroids(lastDayOfWeek: String): Flow<List<AsteroidEntity>>
+
     @Query("SELECT * FROM asteroid WHERE closeApproachDate == :today ORDER BY date(closeApproachDate) DESC")
     fun getTodayAsteroids(today: String): Flow<List<AsteroidEntity>>
+
+    @Query("DELETE FROM asteroid WHERE date(closeApproachDate) < date(:today)")
+    fun deleteBeforeToday(today: String)
 }
