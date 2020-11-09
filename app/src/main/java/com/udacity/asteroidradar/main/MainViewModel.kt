@@ -47,6 +47,16 @@ class MainViewModel(private val apiKey: String, application: Application) : Andr
         }
     }
 
+    fun getWeekAsteroids() {
+        viewModelScope.launch {
+            asteroidRepository.asteroidsOfWeek.map {
+                it.asDomainModel()
+            }.collect {
+                _resultAsteroids.value = it
+            }
+        }
+    }
+
     fun getAllAsteoids() {
         viewModelScope.launch {
             asteroidRepository.asteroidsLocal.map {
