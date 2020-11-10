@@ -1,4 +1,4 @@
-package com.udacity.asteroidradar.main
+package com.udacity.asteroidradar.ui.main
 
 
 import android.view.LayoutInflater
@@ -14,7 +14,7 @@ import com.udacity.asteroidradar.databinding.ItemAsteroidBinding
 class AsteroidsAdapter(
        val onClick: ((item: Asteroid) -> Unit)?
 ): ListAdapter<Asteroid, AsteroidsAdapter.AsteroidViewHolder>(
-    AsteroidDiffCallback()
+        AsteroidDiffCallback()
 ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AsteroidViewHolder {
@@ -25,7 +25,7 @@ class AsteroidsAdapter(
                 false
         )
         return AsteroidViewHolder(
-            binding
+                binding
         )
     }
 

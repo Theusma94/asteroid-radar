@@ -1,7 +1,6 @@
 package com.udacity.asteroidradar.utils
 
 import android.annotation.SuppressLint
-import com.udacity.asteroidradar.Constants
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -25,7 +24,9 @@ object DateHelper {
 
     fun getEndOfWeekFormatted(): String {
         val calendar = Calendar.getInstance()
-        calendar.add(Calendar.DAY_OF_WEEK, 7)
+        val currentDay = calendar.get(Calendar.DAY_OF_WEEK)
+        val leftDays = Calendar.SATURDAY - currentDay
+        calendar.add(Calendar.DAY_OF_WEEK, leftDays)
         val currentTime = calendar.time
         val dateFormat = SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault())
         return dateFormat.format(currentTime)

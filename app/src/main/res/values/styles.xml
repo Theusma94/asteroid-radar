@@ -8,4 +8,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TextDetailTitle" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/default_text_color</item>
+    </style>
+
+    <style name="TextDetailContent" parent="TextDetailTitle">
+        <item name="android:layout_marginTop">4dp</item>
+    </style>
+
 </resources>

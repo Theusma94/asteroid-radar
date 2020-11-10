@@ -1,9 +1,10 @@
-package com.udacity.asteroidradar
+package com.udacity.asteroidradar.utils
 
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.squareup.picasso.Picasso
+import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.data.domain.Asteroid
 import com.udacity.asteroidradar.data.domain.PictureOfDay
 
@@ -13,6 +14,8 @@ fun bindPictureOfDayImage(imageView: ImageView, data: PictureOfDay?) {
     val picasso = Picasso.get()
     picasso.setIndicatorsEnabled(true)
     picasso.load(data?.url)
+            .placeholder(R.drawable.placeholder_picture_of_day)
+            .placeholder(R.drawable.ic_image_error)
             .into(imageView)
     if (data != null) {
         imageView.contentDescription = String.format(context.getString(

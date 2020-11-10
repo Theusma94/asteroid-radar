@@ -44,7 +44,6 @@
             android:id="@+id/asteroid_status_image"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:contentDescription="Simbolo do status do asteroid. Icone vermelho signifa asteroid perigoso, simbolo branco significa que não é perigoso"
             app:statusIcon="@{asteroid}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
