@@ -1,4 +1,4 @@
-package com.udacity.asteroidradar.main
+package com.udacity.asteroidradar.ui.main
 
 import android.app.Application
 import androidx.lifecycle.*
@@ -8,6 +8,7 @@ import com.udacity.asteroidradar.data.domain.PictureOfDay
 import com.udacity.asteroidradar.data.local.getDatabase
 import com.udacity.asteroidradar.data.repository.AsteroidRepository
 import com.udacity.asteroidradar.utils.DataState
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -56,6 +57,7 @@ class MainViewModel(private val apiKey: String, application: Application) : Andr
         }
     }
 
+    @ExperimentalCoroutinesApi
     fun getAllAsteroids() {
         viewModelScope.launch {
             asteroidRepository.allAsteroids.map {
@@ -86,6 +88,7 @@ class MainViewModel(private val apiKey: String, application: Application) : Andr
         }
     }
 
+    @ExperimentalCoroutinesApi
     private fun startFetchAsteroids() {
         viewModelScope.launch {
             asteroidRepository.refreshAsteroids(apiKey).collect { state ->
@@ -108,7 +111,7 @@ class MainViewModel(private val apiKey: String, application: Application) : Andr
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return MainViewModel(apiKey,application) as T
+                return MainViewModel(apiKey, application) as T
             }
             throw IllegalArgumentException("Unable to construct viewmodel")
         }

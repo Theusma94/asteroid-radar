@@ -1,4 +1,4 @@
-package com.udacity.asteroidradar.main
+package com.udacity.asteroidradar.ui.main
 
 import android.os.Bundle
 import android.view.*
@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class MainFragment : Fragment() {
 
@@ -43,6 +44,7 @@ class MainFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    @ExperimentalCoroutinesApi
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.show_all_menu -> {

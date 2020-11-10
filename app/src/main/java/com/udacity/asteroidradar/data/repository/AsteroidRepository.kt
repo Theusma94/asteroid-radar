@@ -8,6 +8,7 @@ import com.udacity.asteroidradar.utils.DataState
 import com.udacity.asteroidradar.utils.DateHelper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -21,6 +22,7 @@ class AsteroidRepository(private val asteroidDatabase: NeoDatabase) {
     val asteroidsOfToday = asteroidDatabase.asteroidDao.getTodayAsteroids(DateHelper.getStartDateFormatted())
     val picOfDay = asteroidDatabase.picOFDayDao.getPictureOfDay()
 
+    @ExperimentalCoroutinesApi
     suspend fun refreshAsteroids(apiKey: String, dispatcher: CoroutineDispatcher = Dispatchers.IO): Flow<DataState> {
         return flow {
             emit(DataState.Loading)
