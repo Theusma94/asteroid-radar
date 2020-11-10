@@ -2,10 +2,10 @@ package com.udacity.asteroidradar.data
 
 import com.udacity.asteroidradar.data.domain.Asteroid
 import com.udacity.asteroidradar.data.domain.PictureOfDay
-import com.udacity.asteroidradar.data.local.AsteroidEntity
+import com.udacity.asteroidradar.data.local.AsteroidDatabase
 import com.udacity.asteroidradar.data.local.PicOfDayDatabase
 
-fun List<AsteroidEntity>.asDomainModel(): List<Asteroid> {
+fun List<AsteroidDatabase>.asDomainModel(): List<Asteroid> {
     return map {
         Asteroid(
                 id = it.id,
@@ -20,9 +20,9 @@ fun List<AsteroidEntity>.asDomainModel(): List<Asteroid> {
     }
 }
 
-fun List<Asteroid>.asDatabaseModel(): List<AsteroidEntity> {
+fun List<Asteroid>.asDatabaseModel(): List<AsteroidDatabase> {
     return map {
-        AsteroidEntity(
+        AsteroidDatabase(
                 id = it.id,
                 codename = it.codename,
                 closeApproachDate = it.closeApproachDate,

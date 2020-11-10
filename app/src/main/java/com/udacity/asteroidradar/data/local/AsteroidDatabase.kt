@@ -1,26 +1,17 @@
 package com.udacity.asteroidradar.data.local
 
-import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.udacity.asteroidradar.data.domain.Asteroid
 
-@Database(entities = [AsteroidEntity::class,PicOfDayDatabase::class], version = 1)
-abstract class AsteroidDatabase: RoomDatabase() {
-    abstract val asteroidDao: AsteroidDao
-
-    abstract val picOFDayDao: PicOFDayDao
-}
-@Volatile
-private lateinit var INSTANCE: AsteroidDatabase
-
-fun getDatabase(context: Context): AsteroidDatabase {
-    synchronized(AsteroidDatabase::class.java) {
-        if (!::INSTANCE.isInitialized) {
-            INSTANCE = Room.databaseBuilder(context.applicationContext,
-                    AsteroidDatabase::class.java,
-                    "asteroids").build()
-        }
-    }
-    return INSTANCE
-}
+@Entity(tableName = "asteroid")
+data class AsteroidDatabase(
+        @PrimaryKey val id: Long,
+        val codename: String,
+        val closeApproachDate: String,
+        val absoluteMagnitude: Double,
+        val estimatedDiameter: Double,
+        val relativeVelocity: Double,
+        val distanceFromEarth: Double,
+        val isPotentiallyHazardous: Boolean
+)

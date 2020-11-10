@@ -28,8 +28,7 @@ class MainViewModel(private val apiKey: String, application: Application) : Andr
         AsteroidRepository(database)
     }
     init {
-        getAllAsteoids()
-
+        getAllAsteroids()
         getPictureOfDay()
     }
 
@@ -41,7 +40,7 @@ class MainViewModel(private val apiKey: String, application: Application) : Andr
                 if (it != null) {
                     _urlPicOfDay.postValue(it)
                 } else {
-                    fetchPicOfDay()
+                    startFetchPicOfDay()
                 }
             }
         }
@@ -57,15 +56,15 @@ class MainViewModel(private val apiKey: String, application: Application) : Andr
         }
     }
 
-    fun getAllAsteoids() {
+    fun getAllAsteroids() {
         viewModelScope.launch {
-            asteroidRepository.asteroidsLocal.map {
+            asteroidRepository.allAsteroids.map {
                 it.asDomainModel()
             }.collect {
                 if (it.isNotEmpty()) {
                     _resultAsteroids.postValue(it)
                 } else {
-                    fetchAsteroids()
+                    startFetchAsteroids()
                 }
             }
         }
@@ -81,13 +80,13 @@ class MainViewModel(private val apiKey: String, application: Application) : Andr
         }
     }
 
-    private fun fetchPicOfDay() {
+    private fun startFetchPicOfDay() {
         viewModelScope.launch {
-            asteroidRepository.refreshPicOfDay(apiKey)
+            asteroidRepository.fetchPictureOfDay(apiKey)
         }
     }
 
-    private fun fetchAsteroids() {
+    private fun startFetchAsteroids() {
         viewModelScope.launch {
             asteroidRepository.refreshAsteroids(apiKey).collect { state ->
                 when(state) {

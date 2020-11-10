@@ -52,7 +52,7 @@ class MainFragment : Fragment() {
                 viewModel.getTodayAsteroids()
             }
             R.id.show_buy_menu -> {
-                viewModel.getAllAsteoids()
+                viewModel.getAllAsteroids()
             }
         }
         return true

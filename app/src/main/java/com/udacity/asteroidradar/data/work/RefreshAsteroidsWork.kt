@@ -23,6 +23,7 @@ import androidx.work.WorkerParameters
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.data.local.getDatabase
 import com.udacity.asteroidradar.data.repository.AsteroidRepository
+import com.udacity.asteroidradar.utils.DataState
 import kotlinx.coroutines.Dispatchers
 import retrofit2.HttpException
 
@@ -37,7 +38,8 @@ class RefreshAsteroidsWork(appContext: Context, params: WorkerParameters):
         val database = getDatabase(applicationContext)
         val repository = AsteroidRepository(database)
         return try {
-            repository.refreshAsteroids(applicationContext.getString(R.string.API_KEY),Dispatchers.Default)
+            repository.fetchAsteroids(applicationContext.getString(R.string.API_KEY))
+            repository.fetchPictureOfDay(applicationContext.getString(R.string.API_KEY))
             repository.deleteAsteroidsBeforeToday(Dispatchers.Default)
             Result.success()
         } catch (e: HttpException) {

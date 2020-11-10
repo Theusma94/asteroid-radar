@@ -13,6 +13,7 @@ fun bindPictureOfDayImage(imageView: ImageView, data: PictureOfDay?) {
     val picasso = Picasso.get()
     picasso.setIndicatorsEnabled(true)
     picasso.load(data?.url)
+            .placeholder(R.drawable.placeholder_picture_of_day)
             .into(imageView)
     if (data != null) {
         imageView.contentDescription = String.format(context.getString(

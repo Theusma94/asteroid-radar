@@ -98,7 +98,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="16dp"
-                        android:contentDescription="Button to show what means au metric"
+                        android:contentDescription="@string/button_to_show_what_means_au_metric"
                         app:srcCompat="@drawable/ic_help_circle" />
 
                 </LinearLayout>

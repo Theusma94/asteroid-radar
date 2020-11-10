@@ -23,4 +23,5 @@
     <string name="asteroid_description_approach_date">Approach date of asteroid is %s</string>
     <string name="asteroid_description_status_icon_hazardous">Asteroid %s is hazardous</string>
     <string name="asteroid_description_status_icon_n_hazardous">Asteroid %s is not hazardous</string>
+    <string name="button_to_show_what_means_au_metric">Button to show what means au metric</string>
 </resources>
