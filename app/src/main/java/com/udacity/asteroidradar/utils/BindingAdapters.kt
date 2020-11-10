@@ -15,6 +15,7 @@ fun bindPictureOfDayImage(imageView: ImageView, data: PictureOfDay?) {
     picasso.setIndicatorsEnabled(true)
     picasso.load(data?.url)
             .placeholder(R.drawable.placeholder_picture_of_day)
+            .placeholder(R.drawable.ic_image_error)
             .into(imageView)
     if (data != null) {
         imageView.contentDescription = String.format(context.getString(
